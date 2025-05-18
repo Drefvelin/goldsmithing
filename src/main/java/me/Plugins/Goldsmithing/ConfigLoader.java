@@ -58,8 +58,10 @@ public class ConfigLoader {
 			j.setMMOItem(config.getConfigurationSection("jewelry."+key+".tiers."+tier).getString("mmoitem"));
 			j.setMaterial(config.getConfigurationSection("jewelry."+key+".tiers."+tier).getString("material"));
 			j.setModelData(config.getConfigurationSection("jewelry."+key+".tiers."+tier).getInt("model_data"));
-			for(String slot : config.getConfigurationSection("jewelry."+key+".tiers."+tier).getStringList("gem_slots")) {
-				j.addGemSlot(slot);
+			if(config.getConfigurationSection("jewelry."+key+".tiers."+tier).contains("stats")) {
+				for(String slot : config.getConfigurationSection("jewelry."+key+".tiers."+tier).getStringList("stats")) {
+					j.addStat(slot);
+				}
 			}
 			tierList.add(j);
 		}

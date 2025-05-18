@@ -14,7 +14,7 @@ public class Jewelry {
 	String mmoitem;
 	String material;
 	Integer modelData;
-	List<String> gemSlots = new ArrayList<String>();
+	List<String> stats = new ArrayList<String>();
 	
 	//Setters
 	public void setId(String id) {
@@ -35,11 +35,11 @@ public class Jewelry {
 	public void setModelData(Integer data) {
 		this.modelData = data;
 	}
-	public void setGemSlots(List<String> slots) {
-		this.gemSlots = slots;
+	public void setStats(List<String> slots) {
+		this.stats = slots;
 	}
-	public void addGemSlot(String slot) {
-		this.gemSlots.add(slot);
+	public void addStat(String slot) {
+		this.stats.add(slot);
 	}
 	
 	//Getters
@@ -68,7 +68,7 @@ public class Jewelry {
 	public Integer getModelData() {
 		return this.modelData;
 	}
-	public List<String> getGemSlots(){
-		return this.gemSlots;
+	public List<String> getStats(){
+		return this.stats;
 	}
 }

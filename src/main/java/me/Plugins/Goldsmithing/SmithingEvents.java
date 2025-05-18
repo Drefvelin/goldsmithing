@@ -27,6 +27,7 @@ import net.Indyuce.mmoitems.api.Type;
 import net.Indyuce.mmoitems.api.item.mmoitem.LiveMMOItem;
 import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
 import net.Indyuce.mmoitems.stat.GemSockets;
+import net.Indyuce.mmoitems.stat.data.DoubleData;
 import net.Indyuce.mmoitems.stat.data.GemSocketsData;
 import net.Indyuce.mmoitems.stat.data.StringData;
 import net.Indyuce.mmoitems.stat.data.type.StatData;
@@ -138,6 +139,7 @@ public class SmithingEvents implements Listener{
 							}
 							stations.remove(t);
 							createJewelryItem(p, t.getCurrentProject(), level);
+							return;
 						} else {
 							p.sendMessage(ChatColor.RED + "You need to smith the item a bit more before branding it!");
 						}
@@ -319,13 +321,15 @@ public class SmithingEvents implements Listener{
 	                og.setString(ChatColor.GOLD + j.getName());
 	                mmoitem.setStatHistory(ItemStats.NAME, hist);
 	            }
-				List<String> sockets = new ArrayList<String>();
-				for(String s : j.getGemSlots()) {
-					sockets.add(s);
+				for(String statString : j.getStats()) {
+					String statType = statString.split("\\(")[0];
+					Double minAmount = 10000 * Double.parseDouble(statString.split("\\(")[1].split("\\-")[0]);
+					Double maxAmount = 10000 * Double.parseDouble(statString.split("\\(")[1].split("\\-")[1].replace(")", ""));
+					Double statAmount = Math.floor(Math.random()*(maxAmount-minAmount)+minAmount);
+					statAmount = statAmount/10000;
+					DoubleData stat = new DoubleData(statAmount);
+					mmoitem.setData(MMOItems.plugin.getStats().get(statType.toUpperCase()), stat);
 				}
-				GemSocketsData gemData = new GemSocketsData(sockets);
-				StatData finalStat = gemData;
-				mmoitem.setData(ItemStats.GEM_SOCKETS, finalStat);
 				ItemStack finalItem = mmoitem.newBuilder().build();
 				ItemMeta meta = finalItem.getItemMeta();
 				meta.setCustomModelData(j.getModelData());
@@ -408,7 +412,7 @@ public class SmithingEvents implements Listener{
 				score = score +(smithingReq.size()-currentHits.size());
 			} else if(smithingReq.size()-currentHits.size() > 0) {
 				if(Math.random()<0.3) {
-					p.sendMessage("&cYou seem to have overdone the hits...");
+					p.sendMessage("§cYou seem to have overdone the hits...");
 				}
 				score = score -(smithingReq.size()-currentHits.size());
 			}
